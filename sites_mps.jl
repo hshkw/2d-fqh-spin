@@ -183,30 +183,40 @@ end
 """
 for site index
 """
-function build_fqh_sites(N::Int; conserved_nf::Bool=true, conserved_g::Bool=true, system::String="torus")::Vector{Index}
+function build_fqh_nsg_sites(N::Int; conserved_nf::Bool=true,conserved_sz::Bool=true,  conserved_g::Bool=true, system::String="torus")::Vector{Index}
     modulus = (system == "torus") ? N : 1
-    return [siteind("FQHFermion"; pos=j, conserved_nf=conserved_nf, conserved_g=conserved_g, modulus=modulus) for j in 1:N]
+    return [
+        siteind(
+            "FQHElectron"; 
+            pos=j, 
+            conserved_nf=conserved_nf, 
+            conserved_sz=conserved_sz, 
+            conserved_g=conserved_g, 
+            modulus=modulus
+        ) 
+        for j in 1:N
+    ]
 end
 
 # --初期MPS構築 -------------------------------------------------------------------
 """for initial state"""
-function build_initial_state(N::Int)::Vector{Int}
+function build_initial_state(N::Int; nu::Int=3)::Vector{Int}
     state = ones(Int, N)  # 1: empty, 2: Up
-    for j in 2:3:N
+    for j in 2:nu:N
         state[j] = 2
     end
     return state
 end
-function build_initial_state2(N::Int)::Vector{Int}
+function build_initial_state2(N::Int; nu::Int=3)::Vector{Int}
     state = ones(Int, N)  # 1: empty, 3: Dn
-    for j in 2:3:N
+    for j in 2:nu:N
         state[j] = 3
     end
     return state
 end
-function build_initial_state3(N::Int)::Vector{Int}
+function build_initial_state3(N::Int; nu::Int=3)::Vector{Int}
     state = ones(Int, N)  # 1: empty, 4: UpDn
-    for j in 2:3:N
+    for j in 2:nu:N
         state[j] = 4
     end
     return state
