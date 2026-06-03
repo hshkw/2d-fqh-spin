@@ -196,9 +196,9 @@ function calc_entanglement_spectrum!(psi::MPS, dir::String)
 end
 
 # ---DMRG 実行-----------------------------------------------------------------------
-function run_dmrg(N::Int; aspect::Float64, maxdim::Int, eps::Float64, system::String, conserved_nf::Bool=true, conserved_g::Bool=true, res_dir::String, init_state::Int=1)
+function run_dmrg(N::Int; aspect::Float64, maxdim::Int, eps::Float64, system::String, conserved_nf::Bool=true, conserved_sz::Bool=true, conserved_g::Bool=true, res_dir::String, init_state::Int=1)
     @info "Building sites..."
-    sites = build_fqh_sites(N; conserved_nf=conserved_nf, conserved_g=conserved_g, system=system)
+    sites = build_fqh_nsg_sites(N; conserved_nf=conserved_nf, conserved_sz=conserved_sz, conserved_g=conserved_g, system=system)
 
     @info "Building initial MPS..."
     psi0 = build_initial_mps(N, sites, init_state)
@@ -233,14 +233,15 @@ function run_dmrg(N::Int; aspect::Float64, maxdim::Int, eps::Float64, system::St
 end
 # ---entry point-----------------------------------------------------------------------
 let
-    N = 60
+    N = 30
     aspect = 2.0
     maxdim = 200
     eps = 1e-5
     conserved_nf = true
+    conserved_sz = true
     conserved_g = true
     system = "torus" # "torus" or "edge"
-    init_state = 3 # 1: |010010...⟩, 2: |100100...⟩, 3: |001001...⟩
+    init_state = 1 # 1: |010010...⟩, 2: |100100...⟩, 3: |001001...⟩
 
     results_dir = abspath("results/fqh_ng_cylinder")
     timestamp = Dates.format(Dates.now(), "yyyy-mm-dd_HHMMSS")
@@ -259,6 +260,6 @@ let
         println(io, "init_state = $init_state")
     end
 
-    energy, psi = run_dmrg(N; aspect=aspect, maxdim=maxdim, eps=eps, system=system, conserved_nf=conserved_nf, conserved_g=conserved_g, res_dir=res_dir, init_state=init_state)
+    energy, psi = run_dmrg(N; aspect=aspect, maxdim=maxdim, eps=eps, system=system, conserved_nf=conserved_nf, conserved_sz=conserved_sz, conserved_g=conserved_g, res_dir=res_dir, init_state=init_state)
     @info @sprintf("Final energy: %.10f", energy)
 end
