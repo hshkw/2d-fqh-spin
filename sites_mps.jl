@@ -189,26 +189,25 @@ function build_fqh_sites(N::Int; conserved_nf::Bool=true, conserved_g::Bool=true
 end
 
 # --初期MPS構築 -------------------------------------------------------------------
-"""for initial state
-"""
+"""for initial state"""
 function build_initial_state(N::Int)::Vector{Int}
-    state = ones(Int, N)  # 1: empty, 2: occupied
+    state = ones(Int, N)  # 1: empty, 2: Up
     for j in 2:3:N
         state[j] = 2
     end
     return state
 end
 function build_initial_state2(N::Int)::Vector{Int}
-    state = ones(Int, N)  # 1: empty, 2: occupied
-    for j in 1:3:N
-        state[j] = 2
+    state = ones(Int, N)  # 1: empty, 3: Dn
+    for j in 2:3:N
+        state[j] = 3
     end
     return state
 end
 function build_initial_state3(N::Int)::Vector{Int}
-    state = ones(Int, N)  # 1: empty, 2: occupied
-    for j in 3:3:N
-        state[j] = 2
+    state = ones(Int, N)  # 1: empty, 4: UpDn
+    for j in 2:3:N
+        state[j] = 4
     end
     return state
 end
