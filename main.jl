@@ -162,6 +162,40 @@ function calc_nj_expectation(psi::MPS, dir::String)
     end
 end
 
+function calc_nupj_expectation(psi::MPS, dir::String)
+    nupj_exp_path = joinpath(dir, "nupj_exp.csv")
+    open(nupj_exp_path, "w") do io
+        header = "j,val"
+        println(io, header)
+    end
+
+    nupj_exp = expect(psi, "Nup")
+    nupjsum = sum(nupj_exp)
+    open(nupj_exp_path, "a") do io
+        for (j, val) in enumerate(nupj_exp)
+            @printf(io, "%d,%.10f\n", j, val)
+        end
+        @printf(io, "%d,%.10f\n", -1, nupjsum)
+    end
+end
+
+function calc_ndnj_expectation(psi::MPS, dir::String)
+    ndnj_exp_path = joinpath(dir, "ndnj_exp.csv")
+    open(ndnj_exp_path, "w") do io
+        header = "j,val"
+        println(io, header)
+    end
+
+    ndnj_exp = expect(psi, "Ndn")
+    ndnjsum = sum(ndnj_exp)
+    open(ndnj_exp_path, "a") do io
+        for (j, val) in enumerate(ndnj_exp)
+            @printf(io, "%d,%.10f\n", j, val)
+        end
+        @printf(io, "%d,%.10f\n", -1, ndnjsum)
+    end
+end
+
 function calc_entanglement_spectrum!(psi::MPS, dir::String)
     es_path = joinpath(dir, "es.csv")
 
@@ -226,6 +260,8 @@ function run_dmrg(N::Int; aspect::Float64, maxdim::Int, eps::Float64, system::St
 
     @info "Calculating expectation values..."
     calc_nj_expectation(psi, res_dir)
+    calc_nupj_expectation(psi, res_dir)
+    calc_ndnj_expectation(psi, res_dir)
     calc_entanglement_spectrum!(psi, res_dir)
 
 
@@ -233,7 +269,7 @@ function run_dmrg(N::Int; aspect::Float64, maxdim::Int, eps::Float64, system::St
 end
 # ---entry point-----------------------------------------------------------------------
 let
-    N = 30
+    N = 18
     aspect = 2.0
     maxdim = 200
     eps = 1e-5
@@ -241,7 +277,7 @@ let
     conserved_sz = true
     conserved_g = true
     system = "torus" # "torus" or "edge"
-    init_state = 1 # 1: |010010...⟩, 2: |100100...⟩, 3: |001001...⟩
+    init_state = 3 # 1: |010010...⟩, 2: |020020...⟩, 3: |03000003...⟩
 
     results_dir = abspath("results/fqh_ng_cylinder")
     timestamp = Dates.format(Dates.now(), "yyyy-mm-dd_HHMMSS")

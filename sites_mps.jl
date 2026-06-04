@@ -15,66 +15,96 @@ function ITensors.space(::SiteType"FQHElectron";
     conserved_g::Bool=true, 
     modulus::Int=1
 )
-    if conserved_nf 
-        if conserved_sz
-            if conserved_g
-                return [
-                    QN(("N", 0), ("Sz", 0), ("G", 0, modulus)) => 1,   # |empty⟩
-                    QN(("N", 1), ("Sz", 1), ("G", pos, modulus)) => 1,   # |up⟩
-                    QN(("N", 1), ("Sz", -1), ("G", pos, modulus)) => 1,   # |down⟩
-                    QN(("N", 2), ("Sz", 0), ("G", 2pos, modulus)) => 1,   # |occupied⟩
-                ]
-            else
-                return [
-                    QN(("N", 0), ("Sz", 0)) => 1,   # |empty⟩
-                    QN(("N", 1), ("Sz", 1)) => 1,   # |up⟩
-                    QN(("N", 1), ("Sz", -1)) => 1,   # |down⟩
-                    QN(("N", 2), ("Sz", 0)) => 1,   # |occupied⟩
-                ]
-            end
-        else
-            if conserved_g
-                return [
-                    QN(("N", 0), ("G", 0, modulus)) => 1,   # |empty⟩
-                    QN(("N", 1), ("G", pos, modulus)) => 2,   # |up⟩, |down⟩
-                    QN(("N", 2), ("G", 2pos, modulus)) => 1,   # |occupied⟩
-                ]
-            else
-                return [
-                    QN(("N", 0)) => 1,   # |empty⟩
-                    QN(("N", 1)) => 2,   # |up⟩, |down⟩
-                    QN(("N", 2)) => 1,   # |occupied⟩
-                ]
-            end
-        end
+    # if conserved_nf 
+    #     if conserved_sz
+    #         if conserved_g
+    #             return [
+    #                 QN(("N", 0), ("Sz", 0), ("G", 0, modulus)) => 1,   # |empty⟩
+    #                 QN(("N", 1), ("Sz", 1), ("G", pos, modulus)) => 1,   # |up⟩
+    #                 QN(("N", 1), ("Sz", -1), ("G", pos, modulus)) => 1,   # |down⟩
+    #                 QN(("N", 2), ("Sz", 0), ("G", 2pos, modulus)) => 1,   # |occupied⟩
+    #             ]
+    #         else
+    #             return [
+    #                 QN(("N", 0), ("Sz", 0)) => 1,   # |empty⟩
+    #                 QN(("N", 1), ("Sz", 1)) => 1,   # |up⟩
+    #                 QN(("N", 1), ("Sz", -1)) => 1,   # |down⟩
+    #                 QN(("N", 2), ("Sz", 0)) => 1,   # |occupied⟩
+    #             ]
+    #         end
+    #     else
+    #         if conserved_g
+    #             return [
+    #                 QN(("N", 0), ("G", 0, modulus)) => 1,   # |empty⟩
+    #                 QN(("N", 1), ("G", pos, modulus)) => 2,   # |up⟩, |down⟩
+    #                 QN(("N", 2), ("G", 2pos, modulus)) => 1,   # |occupied⟩
+    #             ]
+    #         else
+    #             return [
+    #                 QN(("N", 0)) => 1,   # |empty⟩
+    #                 QN(("N", 1)) => 2,   # |up⟩, |down⟩
+    #                 QN(("N", 2)) => 1,   # |occupied⟩
+    #             ]
+    #         end
+    #     end
+    # else
+    #     if conserved_sz
+    #         if conserved_g
+    #             return [
+    #                 QN(("Sz", 0), ("G", 0, modulus)) => 1,   # |empty⟩
+    #                 QN(("Sz", 1), ("G", pos, modulus)) => 1,   # |up⟩
+    #                 QN(("Sz", -1), ("G", pos, modulus)) => 1,   # |down⟩
+    #                 QN(("Sz", 0), ("G", 2pos, modulus)) => 1,   # |occupied⟩
+    #             ]
+    #         else
+    #             return [
+    #                 QN(("Sz", 0)) => 2,   # |empty⟩, |occupied⟩
+    #                 QN(("Sz", 1)) => 1,   # |up⟩
+    #                 QN(("Sz", -1)) => 1,   # |down⟩
+    #             ]
+    #         end
+    #     else
+    #         if conserved_g
+    #             return [
+    #                 QN(("G", 0, modulus)) => 1,   # |empty⟩
+    #                 QN(("G", pos, modulus)) => 2,   # |up⟩, |down⟩
+    #                 QN(("G", 2pos, modulus)) => 1,   # |occupied⟩ [TODO] needs particle num
+    #             ]
+    #         else
+    #             return [QN() => 4]  # No conservation, just four states
+    #         end
+    #     end
+    # end
+    
+    m = pos - 1
+    if conserved_nf && conserved_sz && conserved_g
+        return [
+            QN(("N", 0), ("Sz", 0),  ("G", 0, modulus)) => 1,
+            QN(("N", 1), ("Sz", 1),  ("G", m, modulus)) => 1,
+            QN(("N", 1), ("Sz", -1), ("G", m, modulus)) => 1,
+            QN(("N", 2), ("Sz", 0),  ("G", 2m, modulus)) => 1,
+        ]
+    elseif conserved_nf && conserved_sz
+        return [
+            QN(("N", 0), ("Sz", 0)) => 1,
+            QN(("N", 1), ("Sz", 1)) => 1,
+            QN(("N", 1), ("Sz", -1)) => 1,
+            QN(("N", 2), ("Sz", 0)) => 1,
+        ]
+    elseif conserved_nf && conserved_g
+        return [
+            QN(("N", 0), ("G", 0, modulus)) => 1,
+            QN(("N", 1), ("G", m, modulus)) => 2,
+            QN(("N", 2), ("G", 2m, modulus)) => 1,
+        ]
+    elseif conserved_nf
+        return [
+            QN(("N", 0)) => 1,
+            QN(("N", 1)) => 2,
+            QN(("N", 2)) => 1,
+        ]
     else
-        if conserved_sz
-            if conserved_g
-                return [
-                    QN(("Sz", 0), ("G", 0, modulus)) => 1,   # |empty⟩
-                    QN(("Sz", 1), ("G", pos, modulus)) => 1,   # |up⟩
-                    QN(("Sz", -1), ("G", pos, modulus)) => 1,   # |down⟩
-                    QN(("Sz", 0), ("G", 2pos, modulus)) => 1,   # |occupied⟩
-                ]
-            else
-                return [
-                    QN(("Sz", 0)) => 1,   # |empty⟩
-                    QN(("Sz", 1)) => 1,   # |up⟩
-                    QN(("Sz", -1)) => 1,   # |down⟩
-                    QN(("Sz", 0)) => 1,   # |occupied⟩
-                ]
-            end
-        else
-            if conserved_g
-                return [
-                    QN(("G", 0, modulus)) => 1,   # |empty⟩
-                    QN(("G", pos, modulus)) => 2,   # |up⟩, |down⟩
-                    QN(("G", 2pos, modulus)) => 1,   # |occupied⟩ [TODO] needs particle num
-                ]
-            else
-                return [QN() => 4]  # No conservation, just four states
-            end
-        end
+        return 4
     end
 end
 
@@ -106,6 +136,9 @@ function ITensors.op(::OpName"Ntot", ::SiteType"FQHElectron", s::Index)
     o[s'=>3, s=>3] = 1.0  # |Dn⟩⟨Dn|
     o[s'=>4, s=>4] = 2.0  # |UpDn⟩⟨UpDn|
     return o
+end
+function ITensors.op(::OpName"N", ::SiteType"FQHElectron", s::Index)
+    return op("Ntot", s)
 end
 
 function ITensors.op(::OpName"Sz", ::SiteType"FQHElectron", s::Index)
@@ -216,8 +249,11 @@ function build_initial_state2(N::Int; nu::Int=3)::Vector{Int}
 end
 function build_initial_state3(N::Int; nu::Int=3)::Vector{Int}
     state = ones(Int, N)  # 1: empty, 4: UpDn
-    for j in 2:nu:N
-        state[j] = 4
+    for j in nu:2nu:N
+        state[j] = 2
+    end
+    for j in nu+1:2nu:N
+        state[j] = 3
     end
     return state
 end
