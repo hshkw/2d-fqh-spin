@@ -269,7 +269,7 @@ function run_dmrg(N::Int; aspect::Float64, maxdim::Int, eps::Float64, system::St
 end
 # ---entry point-----------------------------------------------------------------------
 let
-    N = 18
+    N = 30
     aspect = 2.0
     maxdim = 200
     eps = 1e-5
@@ -277,7 +277,7 @@ let
     conserved_sz = true
     conserved_g = true
     system = "torus" # "torus" or "edge"
-    init_state = 3 # 1: |010010...⟩, 2: |020020...⟩, 3: |03000003...⟩
+    init_state = 1 # 1: |010010...⟩, 2: |020020...⟩, 3: |03000003...⟩
 
     results_dir = abspath("results/fqh_ng_cylinder")
     timestamp = Dates.format(Dates.now(), "yyyy-mm-dd_HHMMSS")
