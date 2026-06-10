@@ -105,14 +105,21 @@ function build_hamiltonian(N::Int, aspect::Float64, sites, eps; system::String="
     end
     # === Up-Down ===[TODO]: Fix!
     for j1 in 1:N-1
-        for j2 in j1+1:N # j1にしてもいい
-            coeff = calc_bkl_ferro(j2 - j1, 0, N, aspect, system=system)
+        for j2 in j1+1:N
+            coeff = calc_akl_updown(abs(j2 - j1), 0, N, aspect, system=system)
             if abs(coeff) < tol
                 continue
             end
             os .+= coeff, "Nup", j1, "Ndn", j2
             os .+= coeff, "Ndn", j1, "Nup", j2
         end
+    end
+    for j1 in 1:N # 
+        coeff = calc_akl_updown(0, 0, N, aspect, system=system)
+        if abs(coeff) < tol
+            continue
+        end
+        os .+= coeff, "NupNdn", j1
     end
     # CAAC 4体項: 
     # === Up-Up ===
@@ -225,7 +232,7 @@ function build_hamiltonian(N::Int, aspect::Float64, sites, eps; system::String="
         end
     end
 
-    basis_ops = ["I", "Nup", "Ndn", "Cdagup", "Cup", "Cdagdn", "Cdn", "F"]
+    basis_ops = ["I", "Nup", "Ndn", "NupNdn", "Cdagup", "Cup", "Cdagdn", "Cdn", "F"]
     op_cache_vec = to_OpCacheVec(sites, [basis_ops for _ in 1:N])
 
     H = MPO_new(os, sites; basis_op_cache_vec=op_cache_vec, check_for_errors=false)

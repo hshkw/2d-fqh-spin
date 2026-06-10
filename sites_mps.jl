@@ -130,6 +130,11 @@ function ITensors.op(::OpName"Ndn", ::SiteType"FQHElectron", s::Index)
     o[s'=>4, s=>4] = 1.0  # |UpDn⟩⟨UpDn|
     return o
 end
+function ITensors.op(::OpName"NupNdn", ::SiteType"FQHElectron", s::Index)
+    o = emptyITensor(s', dag(s))
+    o[s'=>4, s=>4] = 1.0  # |UpDn⟩⟨UpDn|
+    return o
+end
 function ITensors.op(::OpName"Ntot", ::SiteType"FQHElectron", s::Index)
     o = emptyITensor(s', dag(s))
     o[s'=>2, s=>2] = 1.0  # |Up⟩⟨Up|
