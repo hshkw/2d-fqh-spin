@@ -59,9 +59,9 @@ end
 
 function calc_akl_updown(k_diff::Int, l_diff::Int, N::Int, aspect::Float64; system::String="torus")::Float64
     if system == "torus"
-        return calc_akl_ferro_torus(k_diff, l_diff, N, aspect)
+        return calc_akl_torus(k_diff, l_diff, N, aspect)
     elseif system == "edge"
-        return calc_akl_ferro_edge(k_diff, l_diff, N, aspect)
+        return calc_akl_edge(k_diff, l_diff, N, aspect)
     else
         error("Invalid system type: $system. Use 'torus' or 'edge'.")
     end
@@ -157,7 +157,7 @@ function build_hamiltonian(N::Int, aspect::Float64, sites, eps; system::String="
                 j4 = j3 + l_diff
                 j4 > N && continue
                 k_diff = j3 - j2
-                coeff = calc_bkl_ferro(k_diff, l_diff, N, aspect, system=system)
+                coeff = calc_akl_updown(k_diff, l_diff, N, aspect, system=system)
                 if abs(coeff) < tol
                     continue
                 end
@@ -214,7 +214,7 @@ function build_hamiltonian(N::Int, aspect::Float64, sites, eps; system::String="
                     j4 > N && continue
                     j4 <= j3 && continue
                     k_diff = j4 - j3
-                    coeff = calc_bkl_ferro(k_diff, l_diff, N, aspect, system=system)
+                    coeff = calc_akl_updown(k_diff, l_diff, N, aspect, system=system)
                     if abs(coeff) < tol
                         continue
                     end
