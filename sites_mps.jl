@@ -187,6 +187,19 @@ function ITensors.op(::OpName"Cdn", ::SiteType"FQHElectron", s::Index)
     o[s'=>2, s=>4] = -1.0  # |Up⟩⟨UpDn|
     return o
 end
+function ITensors.op(::OpName"CupCdn", ::SiteType"FQHElectron", s::Index)
+    o = emptyITensor(s', dag(s))
+    # Cup Cdn |UpDn⟩ = - |Emp⟩
+    o[s'=>1, s=>4] = -1.0
+    return o
+end
+
+function ITensors.op(::OpName"CdagupCdagdn", ::SiteType"FQHElectron", s::Index)
+    o = emptyITensor(s', dag(s))
+    # Cdagup Cdagdn |Emp⟩ = |UpDn⟩
+    o[s'=>4, s=>1] = 1.0
+    return o
+end
 
 function ITensors.op(::OpName"F", ::SiteType"FQHElectron", s::Index)
     o = emptyITensor(s', dag(s))
