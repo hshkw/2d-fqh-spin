@@ -106,7 +106,7 @@ function build_hamiltonian(N::Int, aspect::Float64, sites, eps; system::String="
     # === Up-Down ===[TODO]: Fix!
     for j1 in 1:N-1
         for j2 in j1+1:N
-            coeff = calc_akl_updown(abs(j2 - j1), 0, N, aspect, system=system)
+            coeff = 0.5 * calc_akl_updown(abs(j2 - j1), 0, N, aspect, system=system)
             if abs(coeff) < tol
                 continue
             end
@@ -115,7 +115,7 @@ function build_hamiltonian(N::Int, aspect::Float64, sites, eps; system::String="
         end
     end
     for j1 in 1:N # 同じサイトにupdownがある場合の対角項
-        coeff = calc_akl_updown(0, 0, N, aspect, system=system)
+        coeff = 0.5 * calc_akl_updown(0, 0, N, aspect, system=system)
         if abs(coeff) < tol
             continue
         end
