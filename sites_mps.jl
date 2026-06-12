@@ -267,12 +267,20 @@ function build_initial_state2(N::Int; nu::Int=3)::Vector{Int}
 end
 function build_initial_state3(N::Int; nu::Int=3)::Vector{Int}
     state = ones(Int, N)  # 1: empty, 4: UpDn
-    for j in nu:2nu:N
+    for j in nu-1:2nu:N
         state[j] = 2
     end
-    for j in nu+1:2nu:N
+    for j in nu+2:2nu:N
         state[j] = 3
     end
+    return state
+end
+function build_initial_state99(N::Int; nu::Int=3)::Vector{Int}
+    state = ones(Int, N)  # 1: empty, 4: UpDn
+    state[1] = 2
+    state[12] = 2
+    state[2] = 3
+    state[11] = 3
     return state
 end
 function build_initial_mps(N::Int, sites, init::Int=1)::MPS
@@ -282,6 +290,8 @@ function build_initial_mps(N::Int, sites, init::Int=1)::MPS
         state = build_initial_state2(N)
     elseif init == 3
         state = build_initial_state3(N)
+    elseif init == 99
+        state = build_initial_state99(N)
     else
         throw(ArgumentError("Invalid initial state index. Use 1, 2, or 3."))
     end

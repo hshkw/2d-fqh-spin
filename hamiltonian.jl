@@ -164,7 +164,7 @@ function build_hamiltonian(N::Int, aspect::Float64, sites, eps; system::String="
                 j4 = j3 + l_diff
                 j4 > N && continue
                 k_diff = j3 - j2
-                coeff = calc_akl_updown(k_diff, l_diff, N, aspect, system=system)
+                coeff = 0.5 * calc_akl_updown(k_diff, l_diff, N, aspect, system=system)
                 if abs(coeff) < tol
                     continue
                 end
@@ -182,14 +182,14 @@ function build_hamiltonian(N::Int, aspect::Float64, sites, eps; system::String="
                 j4 = j3 + l_diff
                 j4 > N && continue
                 k_diff = j3 - j2
-                coeff = calc_akl_updown(-k_diff, l_diff, N, aspect, system=system) # cross -> -k
+                coeff = 0.5 * calc_akl_updown(-k_diff, l_diff, N, aspect, system=system) # cross -> -k
                 if abs(coeff) < tol
                     continue
                 end
-                os .+= -coeff, "Cdagup", j1, "Cdn", j2, "Cup", j3, "Cdagdn", j4 # u-d-u-d
-                os .+= -coeff, "Cup", j1, "Cdagdn", j2, "Cdagup", j3, "Cdn", j4 # h.c.
-                os .+= -coeff, "Cdagdn", j1, "Cup", j2, "Cdn", j3, "Cdagup", j4 # d-u-d-u
-                os .+= -coeff, "Cdn", j1, "Cdagup", j2, "Cdagdn", j3, "Cup", j4 # h.c.
+                os .+= coeff, "Cdagup", j1, "Cdn", j2, "Cup", j3, "Cdagdn", j4 # u-d-u-d
+                os .+= coeff, "Cup", j1, "Cdagdn", j2, "Cdagup", j3, "Cdn", j4 # h.c.
+                os .+= coeff, "Cdagdn", j1, "Cup", j2, "Cdn", j3, "Cdagup", j4 # d-u-d-u
+                os .+= coeff, "Cdn", j1, "Cdagup", j2, "Cdagdn", j3, "Cup", j4 # h.c.
             end
         end
     end
@@ -198,13 +198,13 @@ function build_hamiltonian(N::Int, aspect::Float64, sites, eps; system::String="
             l_diff = j2 - j1
             j4 = j2 + l_diff
             j4 > N && continue
-            coeff = calc_akl_updown(0, l_diff, N, aspect, system=system) # cross -> -k
+            coeff = 0.5 * calc_akl_updown(0, l_diff, N, aspect, system=system) # cross -> -k
             if abs(coeff) < tol
                 continue
             end
             os .+= -coeff, "Cdagup", j1, "CupCdn", j2, "Cdagdn", j4 # u-ud-d
-            os .+= -coeff, "Cup", j1, "CdagupCdagdn", j2, "Cdn", j4 # h.c.
-            os .+= -coeff, "Cdagdn", j1, "CupCdn", j2, "Cdagup", j4 # d-ud-u
+            os .+= coeff, "Cup", j1, "CdagupCdagdn", j2, "Cdn", j4 # h.c.
+            os .+= coeff, "Cdagdn", j1, "CupCdn", j2, "Cdagup", j4 # d-ud-u
             os .+= -coeff, "Cdn", j1, "CdagupCdagdn", j2, "Cup", j4 # h.c.
         end
     end
@@ -212,59 +212,59 @@ function build_hamiltonian(N::Int, aspect::Float64, sites, eps; system::String="
     if system == "torus"
         # CCAA 4体項:
         # === Up-Up ===
-        for j1 in 1:N-3
-            for j2 in j1+1:N-2
-                for j3 in j2+1:N-1
-                    l_diff = j3 - j2
-                    j4 = j1 + N - l_diff
-                    j4 > N && continue
-                    j4 <= j3 && continue
-                    k_diff = j4 - j3
-                    coeff = calc_bkl_ferro(k_diff, l_diff, N, aspect, system=system)
-                    if abs(coeff) < tol
-                        continue
-                    end
-                    os .+= coeff, "Cdagup", j1, "Cdagup", j2, "Cup", j3, "Cup", j4
-                    os .+= coeff, "Cup", j1, "Cup", j2, "Cdagup", j3, "Cdagup", j4
-                end
-            end
-        end
-        # === Down-Down ===
-        for j1 in 1:N-3
-            for j2 in j1+1:N-2
-                for j3 in j2+1:N-1
-                    l_diff = j3 - j2
-                    j4 = j1 + N - l_diff
-                    j4 > N && continue
-                    j4 <= j3 && continue
-                    k_diff = j4 - j3
-                    coeff = calc_bkl_ferro(k_diff, l_diff, N, aspect, system=system)
-                    if abs(coeff) < tol
-                        continue
-                    end
-                    os .+= coeff, "Cdagdn", j1, "Cdagdn", j2, "Cdn", j3, "Cdn", j4
-                    os .+= coeff, "Cdn", j1, "Cdn", j2, "Cdagdn", j3, "Cdagdn", j4
-                end
-            end
-        end
-        # === Up-Down === [TODO]: Fix
-        for j1 in 1:N-3
-            for j2 in j1+1:N-2
-                for j3 in j2+1:N-1
-                    l_diff = j3 - j2
-                    j4 = j1 + N - l_diff
-                    j4 > N && continue
-                    j4 <= j3 && continue
-                    k_diff = j4 - j3
-                    coeff = calc_akl_updown(k_diff, l_diff, N, aspect, system=system)
-                    if abs(coeff) < tol
-                        continue
-                    end
-                    os .+= coeff, "Cdagdn", j1, "Cdagup", j2, "Cup", j3, "Cdn", j4
-                    os .+= coeff, "Cdn", j1, "Cup", j2, "Cdagup", j3, "Cdagdn", j4
-                end
-            end
-        end
+        # for j1 in 1:N-3
+        #     for j2 in j1+1:N-2
+        #         for j3 in j2+1:N-1
+        #             l_diff = j3 - j2
+        #             j4 = j1 + N - l_diff
+        #             j4 > N && continue
+        #             j4 <= j3 && continue
+        #             k_diff = j4 - j3
+        #             coeff = calc_bkl_ferro(k_diff, l_diff, N, aspect, system=system)
+        #             if abs(coeff) < tol
+        #                 continue
+        #             end
+        #             os .+= coeff, "Cdagup", j1, "Cdagup", j2, "Cup", j3, "Cup", j4
+        #             os .+= coeff, "Cup", j1, "Cup", j2, "Cdagup", j3, "Cdagup", j4
+        #         end
+        #     end
+        # end
+        # # === Down-Down ===
+        # for j1 in 1:N-3
+        #     for j2 in j1+1:N-2
+        #         for j3 in j2+1:N-1
+        #             l_diff = j3 - j2
+        #             j4 = j1 + N - l_diff
+        #             j4 > N && continue
+        #             j4 <= j3 && continue
+        #             k_diff = j4 - j3
+        #             coeff = calc_bkl_ferro(k_diff, l_diff, N, aspect, system=system)
+        #             if abs(coeff) < tol
+        #                 continue
+        #             end
+        #             os .+= coeff, "Cdagdn", j1, "Cdagdn", j2, "Cdn", j3, "Cdn", j4
+        #             os .+= coeff, "Cdn", j1, "Cdn", j2, "Cdagdn", j3, "Cdagdn", j4
+        #         end
+        #     end
+        # end
+        # # === Up-Down === [TODO]: Fix
+        # for j1 in 1:N-3
+        #     for j2 in j1+1:N-2
+        #         for j3 in j2+1:N-1
+        #             l_diff = j3 - j2
+        #             j4 = j1 + N - l_diff
+        #             j4 > N && continue
+        #             j4 <= j3 && continue
+        #             k_diff = j4 - j3
+        #             coeff = calc_akl_updown(k_diff, l_diff, N, aspect, system=system)
+        #             if abs(coeff) < tol
+        #                 continue
+        #             end
+        #             os .+= coeff, "Cdagdn", j1, "Cdagup", j2, "Cup", j3, "Cdn", j4
+        #             os .+= coeff, "Cdn", j1, "Cup", j2, "Cdagup", j3, "Cdagdn", j4
+        #         end
+        #     end
+        # end
     end
 
     basis_ops = ["I", "Nup", "Ndn", "NupNdn", "Cdagup", "Cup", "Cdagdn", "Cdn", "CdagupCdagdn", "CupCdn", "F"]
