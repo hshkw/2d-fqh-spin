@@ -123,40 +123,40 @@ function build_hamiltonian(N::Int, aspect::Float64, sites, eps; system::String="
     end
     # CAAC 4体項: 
     # === Up-Up ===
-    # for j1 in 1:N-3
-    #     for j2 in j1+1:N-2
-    #         l_diff = j2 - j1
-    #         for j3 in j2+1:N-1
-    #             j4 = j3 + l_diff
-    #             j4 > N && continue
-    #             k_diff = j3 - j2
-    #             coeff = calc_bkl_ferro(k_diff, l_diff, N, aspect, system=system)
-    #             if abs(coeff) < tol
-    #                 continue
-    #             end
-    #             os .+= -coeff, "Cdagup", j1, "Cup", j2, "Cup", j3, "Cdagup", j4
-    #             os .+= -coeff, "Cup", j1, "Cdagup", j2, "Cdagup", j3, "Cup", j4
-    #         end
-    #     end
-    # end
-    # # === Down-Down ===
-    # for j1 in 1:N-3
-    #     for j2 in j1+1:N-2
-    #         l_diff = j2 - j1
-    #         for j3 in j2+1:N-1
-    #             j4 = j3 + l_diff
-    #             j4 > N && continue
-    #             k_diff = j3 - j2
-    #             coeff = calc_bkl_ferro(k_diff, l_diff, N, aspect, system=system)
-    #             if abs(coeff) < tol
-    #                 continue
-    #             end
-    #             os .+= -coeff, "Cdagdn", j1, "Cdn", j2, "Cdn", j3, "Cdagdn", j4
-    #             os .+= -coeff, "Cdn", j1, "Cdagdn", j2, "Cdagdn", j3, "Cdn", j4
-    #         end
-    #     end
-    # end
-    # # === Up-Down === [TODO]: Fix
+    for j1 in 1:N-3
+        for j2 in j1+1:N-2
+            l_diff = j2 - j1
+            for j3 in j2+1:N-1
+                j4 = j3 + l_diff
+                j4 > N && continue
+                k_diff = j3 - j2
+                coeff = calc_bkl_ferro(k_diff, l_diff, N, aspect, system=system)
+                if abs(coeff) < tol
+                    continue
+                end
+                os .+= -coeff, "Cdagup", j1, "Cup", j2, "Cup", j3, "Cdagup", j4
+                os .+= -coeff, "Cup", j1, "Cdagup", j2, "Cdagup", j3, "Cup", j4
+            end
+        end
+    end
+    # === Down-Down ===
+    for j1 in 1:N-3
+        for j2 in j1+1:N-2
+            l_diff = j2 - j1
+            for j3 in j2+1:N-1
+                j4 = j3 + l_diff
+                j4 > N && continue
+                k_diff = j3 - j2
+                coeff = calc_bkl_ferro(k_diff, l_diff, N, aspect, system=system)
+                if abs(coeff) < tol
+                    continue
+                end
+                os .+= -coeff, "Cdagdn", j1, "Cdn", j2, "Cdn", j3, "Cdagdn", j4
+                os .+= -coeff, "Cdn", j1, "Cdagdn", j2, "Cdagdn", j3, "Cdn", j4
+            end
+        end
+    end
+    # === Up-Down === [TODO]: Fix
     # for j1 in 1:N-3 # direct term: u-u-d-d or d-d-u-u
     #     for j2 in j1+1:N-2
     #         l_diff = j2 - j1
