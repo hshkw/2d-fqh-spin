@@ -277,8 +277,8 @@ let
     conserved_sz = true
     conserved_g = true
     system = "edge" # "torus" or "edge"
-    init_state = 1 # 1: |010010...⟩, 2: |020020...⟩, 3: |03000003...⟩
-    # init_state = 99
+    # init_state = 1 # 1: |010010...⟩, 2: |020020...⟩, 3: |03000003...⟩
+    init_state = 99
 
     results_dir = abspath("results/fqh_ng_cylinder")
     timestamp = Dates.format(Dates.now(), "yyyy-mm-dd_HHMMSS")
