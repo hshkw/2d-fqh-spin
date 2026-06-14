@@ -54,13 +54,13 @@ function ITensorMPS.checkdone!(o::MemoryDMRGObserver; kwargs...)
         line *= ",$(diff_eg)"
         println(io, line)
     end
-    if (
-        length(real(energies(o.inner))) > o.inner.minsweeps &&
-        abs(real(energies(o.inner))[end] - real(energies(o.inner))[end-1]) < o.inner.etol
-    )
-        @info @sprintf("Energy difference less than %.1E, stopping DMRG", o.inner.etol)
-        return true
-    end
+    # if (
+    #     length(real(energies(o.inner))) > o.inner.minsweeps &&
+    #     abs(real(energies(o.inner))[end] - real(energies(o.inner))[end-1]) < o.inner.etol
+    # )
+    #     @info @sprintf("Energy difference less than %.1E, stopping DMRG", o.inner.etol)
+    #     return true
+    # end
 
     return false
 end
