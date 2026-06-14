@@ -157,24 +157,24 @@ function build_hamiltonian(N::Int, aspect::Float64, sites, eps; system::String="
         end
     end
     # === Up-Down === [TODO]: Fix
-    # for j1 in 1:N-3 # direct term: u-u-d-d or d-d-u-u
-    #     for j2 in j1+1:N-2
-    #         l_diff = j2 - j1
-    #         for j3 in j2+1:N-1
-    #             j4 = j3 + l_diff
-    #             j4 > N && continue
-    #             k_diff = j3 - j2
-    #             coeff = calc_akl_updown(k_diff, l_diff, N, aspect, system=system)
-    #             if abs(coeff) < tol
-    #                 continue
-    #             end
-    #             os .+= -coeff, "Cdagup", j1, "Cup", j2, "Cdn", j3, "Cdagdn", j4 # u-u-d-d
-    #             os .+= -coeff, "Cup", j1, "Cdagup", j2, "Cdagdn", j3, "Cdn", j4 # h.c.
-    #             os .+= -coeff, "Cdn", j1, "Cdagdn", j2, "Cdagup", j3, "Cup", j4 # d-d-u-u
-    #             os .+= -coeff, "Cdagdn", j1, "Cdn", j2, "Cup", j3, "Cdagup", j4 # h.c.
-    #         end
-    #     end
-    # end
+    for j1 in 1:N-3 # direct term: u-u-d-d or d-d-u-u
+        for j2 in j1+1:N-2
+            l_diff = j2 - j1
+            for j3 in j2+1:N-1
+                j4 = j3 + l_diff
+                j4 > N && continue
+                k_diff = j3 - j2
+                coeff = calc_akl_updown(k_diff, l_diff, N, aspect, system=system)
+                if abs(coeff) < tol
+                    continue
+                end
+                os .+= -coeff, "Cdagup", j1, "Cup", j2, "Cdn", j3, "Cdagdn", j4 # u-u-d-d
+                os .+= -coeff, "Cup", j1, "Cdagup", j2, "Cdagdn", j3, "Cdn", j4 # h.c.
+                os .+= -coeff, "Cdn", j1, "Cdagdn", j2, "Cdagup", j3, "Cup", j4 # d-d-u-u
+                os .+= -coeff, "Cdagdn", j1, "Cdn", j2, "Cup", j3, "Cdagup", j4 # h.c.
+            end
+        end
+    end
     for j1 in 1:N-3 # cross term: u-d-u-d or d-u-d-u
         for j2 in j1+1:N-2
             l_diff = j2 - j1
@@ -205,8 +205,8 @@ function build_hamiltonian(N::Int, aspect::Float64, sites, eps; system::String="
             os .+= -coeff, "Sminus", j1, "Splus", j2 # h.c.
         end
     end
-    # for j1 in 1:N-3 # cross term with same-site-ud: u-ud-d or d-ud-u
-    #     for j2 in j1+1:N-2
+    # for j1 in 1:N-2 # cross term with same-site-ud: u-ud-d or d-ud-u
+    #     for j2 in j1+1:N-1
     #         l_diff = j2 - j1
     #         j4 = j2 + l_diff
     #         j4 > N && continue
@@ -288,7 +288,7 @@ function build_hamiltonian(N::Int, aspect::Float64, sites, eps; system::String="
     ]
     op_cache_vec = to_OpCacheVec(sites, [basis_ops for _ in 1:N])
 
-    H = MPO_new(os, sites; basis_op_cache_vec=op_cache_vec, check_for_errors=false)
+    H = MPO_new(os, sites; basis_op_cache_vec=op_cache_vec, check_for_errors=true)
     max_link_dim = maximum([dim(linkind(H, b)) for b in 1:length(H)-1])
     @info "Constructed Hamiltonian MPO, max link dim = $max_link_dim"
 
