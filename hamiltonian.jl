@@ -182,7 +182,7 @@ function build_hamiltonian(N::Int, aspect::Float64, sites, eps; system::String="
                 j4 = j3 + l_diff
                 j4 > N && continue
                 k_diff = j3 - j2
-                coeff = calc_akl_updown(-k_diff, k_diff + l_diff, N, aspect, system=system) # cross -> -k
+                coeff = calc_akl_updown(-k_diff, k_diff+l_diff, N, aspect, system=system) # cross -> -k
                 if abs(coeff) < tol
                     continue
                 end
@@ -197,12 +197,12 @@ function build_hamiltonian(N::Int, aspect::Float64, sites, eps; system::String="
         for j2 in j1+1:N
             
             k_diff = j2 - j1
-            coeff = calc_akl_updown(k_diff, -k_diff, N, aspect, system=system) # cross -> -k
+            coeff = calc_akl_updown(-k_diff, k_diff, N, aspect, system=system) # cross -> -k
             if abs(coeff) < tol
                 continue
             end
             os .+= -coeff, "Splus", j1, "Sminus", j2 # u-d-u-d
-            os .+= -coeff, "Sminus", j1, "Splus", j2 # u-d-u-d
+            os .+= -coeff, "Sminus", j1, "Splus", j2 # h.c.
         end
     end
     # for j1 in 1:N-3 # cross term with same-site-ud: u-ud-d or d-ud-u
