@@ -54,13 +54,13 @@ function ITensorMPS.checkdone!(o::MemoryDMRGObserver; kwargs...)
         line *= ",$(diff_eg)"
         println(io, line)
     end
-    # if (
-    #     length(real(energies(o.inner))) > o.inner.minsweeps &&
-    #     abs(real(energies(o.inner))[end] - real(energies(o.inner))[end-1]) < o.inner.etol
-    # )
-    #     @info @sprintf("Energy difference less than %.1E, stopping DMRG", o.inner.etol)
-    #     return true
-    # end
+    if (
+        length(real(energies(o.inner))) > o.inner.minsweeps &&
+        abs(real(energies(o.inner))[end] - real(energies(o.inner))[end-1]) < o.inner.etol
+    )
+        @info @sprintf("Energy difference less than %.1E, stopping DMRG", o.inner.etol)
+        return true
+    end
 
     return false
 end
@@ -269,8 +269,8 @@ function run_dmrg(N::Int; aspect::Float64, maxdim::Int, eps::Float64, system::St
 end
 # ---entry point-----------------------------------------------------------------------
 let
-    N = 12
-    aspect = 1.0
+    N = 120
+    aspect = 3.0
     maxdim = 200
     eps = 1e-5
     conserved_nf = true

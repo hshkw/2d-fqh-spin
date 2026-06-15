@@ -277,10 +277,13 @@ function build_initial_state3(N::Int; nu::Int=3)::Vector{Int}
 end
 function build_initial_state99(N::Int; nu::Int=3)::Vector{Int}
     state = ones(Int, N)  # 1: empty, 4: UpDn
-    state[1] = 2
-    state[12] = 2
-    state[2] = 3
-    state[11] = 3
+    state = build_initial_state(N; nu)
+    state[1] = 3
+    state[2] = 4
+    # state[3] = 3
+    # state[N-2] = 3
+    state[N-1] = 4
+    state[N] = 3
     return state
 end
 function build_initial_mps(N::Int, sites, init::Int=1)::MPS
