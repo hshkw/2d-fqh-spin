@@ -6,6 +6,9 @@ function calc_form_factor(qq_n::Float64)::Float64
 end
 
 function calc_akl_edge(k_diff::Int, l_diff::Int, N::Int, aspect::Float64, threshold::Float64=1e-15)::Float64
+    insulator_layer = 2000
+    N *= insulator_layer
+    aspect *= insulator_layer
 
     akl = 0.0
 
@@ -77,6 +80,10 @@ function calc_bkl_ferro(k_diff::Int, l_diff::Int, N::Int, aspect::Float64; syste
     end
 end
 
+function calc_confining_potential(A::Float64, d::Float64, site::Int, ns::Int)::Float64
+    return A * (exp(-(site-1)/d) + exp((site-ns)/d))
+end
+
 # ---------- ハミルトニアン構築 ----------------------------------------------
 function build_hamiltonian(N::Int, aspect::Float64, sites, eps; system::String="torus")::MPO
     os = OpSum()
@@ -120,6 +127,14 @@ function build_hamiltonian(N::Int, aspect::Float64, sites, eps; system::String="
             continue
         end
         os .+= coeff, "NupNdn", j1
+
+        coeff = calc_confining_potential(3.0, 1.0, j1, N)
+        if abs(coeff) < tol
+            continue
+        end
+        os .+= coeff, "Nup", j1
+        os .+= coeff, "Ndn", j1
+        os .+= 2 * coeff, "NupNdn", j1
     end
     # CAAC 4体項: 
     # === Up-Up ===
