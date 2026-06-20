@@ -196,6 +196,30 @@ function calc_ndnj_expectation(psi::MPS, dir::String)
     end
 end
 
+function calc_sz_expectation(psi::MPS, dir::String)
+    sj_exp_path = joinpath(dir, "sx_exp_path.csv")
+    open(sj_exp_path, "w") do io
+        header = "j,sz"
+        println(io, header)
+    end
+
+    sz_exp = expect(psi, "Sz")
+    szsum = sum(sz_exp)
+    open(sj_exp_path, "a") do io
+        for j in eachindex(sx_exp)
+            @printf(
+                io, "%d,%.10f\n",
+                j, sz_exp[j],
+            )
+        end
+
+        @printf(
+            io, "%d,%.10f\n",
+            -1, szsum,
+        )
+    end
+end
+
 function calc_entanglement_spectrum!(psi::MPS, dir::String)
     es_path = joinpath(dir, "es.csv")
 
@@ -224,6 +248,29 @@ function calc_entanglement_spectrum!(psi::MPS, dir::String)
                 @printf(io, "%d,%d,%.10f\n", qn_n, qn_g, -log(prob))
             end
             offset += block_dim
+        end
+    end
+
+end
+function calc_sisj_correlations(psi::MPS, dir::String)
+    corr_path = joinpath(dir, "sisj_corr.csv")
+
+    # 2点相関
+    spsm = correlation_matrix(psi, "Splus", "Sminus")
+    smsp = correlation_matrix(psi, "Sminus", "Splus")
+    szsz = correlation_matrix(psi, "Sz", "Sz")
+
+    open(corr_path, "w") do io
+        println(io, "i,j,spsm,smsp,szsz")
+
+        for i in 1:length(psi)-1
+            for j in i+1:length(psi)
+                @printf(
+                    io, "%d,%d,%.12e,%.12e,%.12e\n",
+                    i, j,
+                    real(spsm[i, j]), real(smsp[i, j]), real(szsz[i, j]),
+                 )
+            end
         end
     end
 
@@ -263,7 +310,9 @@ function run_dmrg(N::Int; aspect::Float64, maxdim::Int, eps::Float64, system::St
     calc_nupj_expectation(psi, res_dir)
     calc_ndnj_expectation(psi, res_dir)
     calc_entanglement_spectrum!(psi, res_dir)
-
+    # calc_sj_expectation(psi, res_dir)
+    
+    calc_sisj_correlations(psi, res_dir)
 
     return energy, psi
 end

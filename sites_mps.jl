@@ -162,6 +162,16 @@ function ITensors.op(::OpName"Sminus", ::SiteType"FQHElectron", s::Index)
     o[s'=>3, s=>2] = 1.0  # |Dn⟩⟨Up|
     return o
 end
+function ITensors.op(::OpName"Sx", ::SiteType"FQHElectron", s::Index)
+    o = emptyITensor(s', dag(s))
+    o[s'=>2, s=>3] = 1.0
+    o[s'=>3, s=>2] = 1.0
+end
+function ITensors.op(::OpName"Sy", ::SiteType"FQHElectron", s::Index)
+    o = emptyITensor(s', dag(s))
+    o[s'=>2, s=>3] = -1.0
+    o[s'=>3, s=>2] = 1.0
+end
 
 function ITensors.op(::OpName"Cdagup", ::SiteType"FQHElectron", s::Index)
     o = emptyITensor(s', dag(s))
@@ -277,10 +287,16 @@ function build_initial_state3(N::Int; nu::Int=3)::Vector{Int}
 end
 function build_initial_state99(N::Int; nu::Int=3)::Vector{Int}
     state = ones(Int, N)  # 1: empty, 4: UpDn
-    state = build_initial_state(N; nu)
-    for j in 1:3:N
+    for j in 2:3:N
         state[j] = 2
-        state[j+2] = 3
+    end
+    # for j in 62:3:N
+    #     state[j] = 3
+    # end
+    ndn = 20
+    ndn_pos = N - 3 * ndn + 2
+    for j in N-1:-3:ndn_pos
+        state[j] = 3
     end
     return state
 end

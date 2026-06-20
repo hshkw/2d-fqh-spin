@@ -6,9 +6,9 @@ function calc_form_factor(qq_n::Float64)::Float64
 end
 
 function calc_akl_edge(k_diff::Int, l_diff::Int, N::Int, aspect::Float64, threshold::Float64=1e-15)::Float64
-    insulator_layer = 2000
-    N *= insulator_layer
-    aspect *= insulator_layer
+    # insulator_layer = 2000
+    # N *= insulator_layer
+    # aspect *= insulator_layer
 
     akl = 0.0
 
@@ -122,20 +122,23 @@ function build_hamiltonian(N::Int, aspect::Float64, sites, eps; system::String="
         end
     end
     for j1 in 1:N # 同じサイトにupdownがある場合の対角項
+        # Akl nup ndn
         coeff = calc_akl_updown(0, 0, N, aspect, system=system)
         if abs(coeff) < tol
             continue
         end
         os .+= coeff, "NupNdn", j1
 
-        coeff = calc_confining_potential(3.0, 1.0, j1, N)
-        if abs(coeff) < tol
-            continue
-        end
-        os .+= coeff, "Nup", j1
-        os .+= coeff, "Ndn", j1
-        os .+= 2 * coeff, "NupNdn", j1
+        # V nup Ndn
+        # coeff = calc_confining_potential(3.0, 1.0, j1, N)
+        # if abs(coeff) < tol
+        #     continue
+        # end
+        # os .+= coeff, "Nup", j1
+        # os .+= coeff, "Ndn", j1
+        # os .+= 2 * coeff, "NupNdn", j1
     end
+
     # CAAC 4体項: 
     # === Up-Up ===
     for j1 in 1:N-3
