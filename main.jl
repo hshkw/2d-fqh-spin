@@ -319,15 +319,17 @@ end
 # ---entry point-----------------------------------------------------------------------
 let
     N = 120
-    aspect = 3.0
-    maxdim = 200
+    aspect = 3.0 * N / 120 
+    # aspect = 3.0
+    aspect = 2.0
+    maxdim = 3200
     eps = 1e-5
     conserved_nf = true
     conserved_sz = true
     conserved_g = true
     system = "edge" # "torus" or "edge"
     # init_state = 1 # 1: |010010...⟩, 2: |020020...⟩, 3: |03000003...⟩
-    init_state = 99
+    init_state = 1
 
     results_dir = abspath("results/fqh_ng_cylinder")
     timestamp = Dates.format(Dates.now(), "yyyy-mm-dd_HHMMSS")

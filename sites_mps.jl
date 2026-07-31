@@ -266,6 +266,10 @@ function build_initial_state(N::Int; nu::Int=3)::Vector{Int}
     for j in 2:nu:N
         state[j] = 2
     end
+    flip = 1
+    for j in (N-3flip+2):3:N
+        state[N-j] = 3
+    end
     return state
 end
 function build_initial_state2(N::Int; nu::Int=3)::Vector{Int}
@@ -285,19 +289,164 @@ function build_initial_state3(N::Int; nu::Int=3)::Vector{Int}
     end
     return state
 end
-function build_initial_state99(N::Int; nu::Int=3)::Vector{Int}
+function build_initial_state50(N::Int; nu::Int=3)::Vector{Int}
     state = ones(Int, N)  # 1: empty, 4: UpDn
-    for j in 2:3:N
+    for j in nu-1:nu:120
         state[j] = 2
     end
-    # for j in 62:3:N
-    #     state[j] = 3
-    # end
-    ndn = 20
-    ndn_pos = N - 3 * ndn + 2
-    for j in N-1:-3:ndn_pos
+    for j in 123:nu:N
         state[j] = 3
     end
+    return state
+end
+function build_initial_state99(N::Int; nu::Int=3)::Vector{Int}
+    state = ones(Int, N)  # 1: empty, 4: UpDn
+    # for j in 2:6:N
+    #     state[j] = 2
+    #     state[j+3] = 3
+    # end
+    for j in 2:3:60
+        state[j] = 2
+    end
+    # dn_pos = [
+    #     20,23,
+    #     41,44,47,
+    #     62,65,68,71,
+    #     83,86,89,92,95,
+    #     104,107,110,113,116,119,
+    # ]
+    # for j in 61:3:N
+    #     state[j] = 2
+    # end
+    # dn_pos_m = [
+    #     20,23,
+    #     41,44,47,
+    #     61,64,67,70,
+    #     82,85,88,91,94,
+    #     103,106,109,112,115,118,
+    # ]
+    for j in 63:3:N
+        state[j] = 2
+    end
+    dn_pos_p = [
+        20,23,
+        41,44,47,
+        63,66,69,72,
+        84,87,90,93,96,
+        105,108,111,114,117,120,
+    ]
+    for dnp in dn_pos_p
+        state[dnp] = 3
+    end
+    # for j in 2:3:60
+    #     state[j] = 2
+    # end
+    # for j in 63:3:N
+    #     state[j] = 3
+    # end
+    # state[59] = 3
+    # # for j in 62:3:N
+    # #     state[j] = 3
+    # # end
+    # ndn = 1
+    # ndn_pos = N - 3 * ndn + 2
+    # for j in N-1:-3:ndn_pos
+    #     state[j] = 3
+    # end
+    # for j in 2:6:N
+    #     state[j] = 2
+    #     state[j+3] = 3
+    # end
+    return state
+end
+function build_initial_state96(N::Int; nu::Int=3)::Vector{Int}
+    state = ones(Int, N)  # 1: empty, 4: UpDn
+    for j in 2:3:48
+        state[j] = 2
+    end
+    # dn_pos = [
+    #     20,23,
+    #     32,
+    #     41,44,47,
+    #     56,
+    #     62,65,68,71,
+    #     83,86,89,92,95,
+    # ]
+    # Ns - 1
+    # for j in 49:3:N
+    #     state[j] = 2
+    # end
+    # dn_pos_m = [
+    #     20,23,
+    #     32,
+    #     41,44,47,
+    #     55,
+    #     61,64,67,70,
+    #     82,85,88,91,94,
+    # ]
+    # for dnp in dn_pos_m
+    #     state[dnp] = 3
+    # end
+
+    # Ns + 1
+    for j in 51:3:N
+        state[j] = 2
+    end
+    dn_pos_p = [
+        20,23,
+        32,
+        41,44,47,
+        57,
+        63,66,69,72,
+        84,87,90,93,96,
+    ]
+    for dnp in dn_pos_p
+        state[dnp] = 3
+    end
+    return state
+end
+function build_initial_state72(N::Int; nu::Int=3)::Vector{Int}
+    state = ones(Int, N)  # 1: empty, 4: UpDn
+    for j in 2:3:36
+        state[j] = 2
+    end
+    # dn_pos = [
+    #     20,23,
+    #     32,
+    #     41,44,47,
+    #     56,
+    #     62,65,68,71,
+    #     83,86,89,92,95,
+    # ]
+    # Ns - 1
+    for j in 37:3:N
+        state[j] = 2
+    end
+    dn_pos_m = [
+        20,23,
+        32,35,
+        40,43,46,
+        55,
+        61,64,67,70,
+    ]
+    for dnp in dn_pos_m
+        state[dnp] = 3
+    end
+
+    # Ns + 1
+    # for j in 39:3:N
+    #     state[j] = 2
+    # end
+    # dn_pos_p = [
+    #     20,23,
+    #     32,35,
+    #     42,45,48,
+    #     57,
+    #     63,66,69,72,
+    # ]
+    # for dnp in dn_pos_p
+    #     state[dnp] = 3
+    # end
     return state
 end
 function build_initial_mps(N::Int, sites, init::Int=1)::MPS
@@ -309,9 +458,16 @@ function build_initial_mps(N::Int, sites, init::Int=1)::MPS
         state = build_initial_state3(N)
     elseif init == 99
         state = build_initial_state99(N)
+    elseif init == 96
+        state = build_initial_state96(N)
+    elseif init == 72
+        state = build_initial_state72(N)
+    elseif init == 50
+        state = build_initial_state50(N)
     else
         throw(ArgumentError("Invalid initial state index. Use 1, 2, or 3."))
     end
+    # return random_mps(sites, state; linkdims=100)
     return MPS(sites, state)
 end
 
