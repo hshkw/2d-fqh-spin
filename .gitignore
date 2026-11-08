@@ -1,6 +1,12 @@
+# Calculation outputs
 output/
 results/
 data/
 tmpout/
+*.log
 
+# OS
+.DS_Store
+
+# Excluded source file
 fqhsfermion_mps.jl
