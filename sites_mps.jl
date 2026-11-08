@@ -268,7 +268,7 @@ function build_initial_state(N::Int; nu::Int=3)::Vector{Int}
     end
     flip = 1
     for j in (N-3flip+2):3:N
-        state[N-j] = 3
+        state[j] = 3
     end
     return state
 end
@@ -296,6 +296,25 @@ function build_initial_state50(N::Int; nu::Int=3)::Vector{Int}
     end
     for j in 123:nu:N
         state[j] = 3
+    end
+    return state
+end
+function build_initial_state53(N::Int; nu::Int=3)::Vector{Int}
+    # \nu = 5/3の非偏極状態
+    state = ones(Int, N)  # 1: empty, 4: UpDn
+    for j in 1:N
+        state[j] = 4
+    end
+    frame = 2nu
+    frrame = 0
+    for j in 1+frame:2nu:60
+        state[j] = 2
+        state[j+nu] = 3
+    end
+    # state[61] = 1
+    for j in 62:2nu:N-frame
+        state[j] = 2
+        state[j+nu] = 3
     end
     return state
 end
@@ -464,6 +483,8 @@ function build_initial_mps(N::Int, sites, init::Int=1)::MPS
         state = build_initial_state72(N)
     elseif init == 50
         state = build_initial_state50(N)
+    elseif init == 53
+        state = build_initial_state53(N)
     else
         throw(ArgumentError("Invalid initial state index. Use 1, 2, or 3."))
     end

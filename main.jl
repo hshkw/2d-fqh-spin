@@ -108,13 +108,14 @@ function ITensorMPS.measure!(o::MemoryDMRGObserver; kwargs...)
 end
 # ----スイープスケジュール------------------------------------------------
 function make_sweeps(maxdim::Int)::Sweeps
+    sweep_num = 50
     dims = [20]
     wnum = 1
     while last(dims) * 2 < maxdim
         push!(dims, last(dims) * 2)
         wnum += 1
     end
-    for _ in 1:20
+    for _ in 1:sweep_num
         push!(dims, maxdim)
     end
 
@@ -145,6 +146,35 @@ function make_sweeps(maxdim::Int)::Sweeps
     return sweeps
 end
 # ---期待値計算-----------------------------------------------------------------------
+function calc_orbital_occupation_expectations(psi::MPS, dir::String; file::String = "orb_occ_exp.csv")
+    mkpath(dir)
+
+    output_path = joinpath(dir, file)
+
+    nj_exp = expect(psi, "N")
+    nupj_exp = expect(psi, "Nup")
+    ndnj_exp = expect(psi, "Ndn")
+
+    N = length(psi)
+
+    open(output_path, "w") do io
+        println(io, "j,ndn,nup,ntot")
+
+        for j in 1:N
+            @printf(
+                io, "%d,%.10f,%.10f,%.10f\n",
+                j, ndnj_exp[j], nupj_exp[j], nj_exp[j],
+            )
+        end
+
+        @printf(
+            io, "%d,%.10f,%.10f,%.10f\n",
+            -1, sum(ndnj_exp), sum(nupj_exp),sum(nj_exp),
+        )
+    end
+
+    return nothing
+end
 function calc_nj_expectation(psi::MPS, dir::String)
     nj_exp_path = joinpath(dir, "nj_exp.csv")
     open(nj_exp_path, "w") do io
@@ -306,9 +336,11 @@ function run_dmrg(N::Int; aspect::Float64, maxdim::Int, eps::Float64, system::St
     )
 
     @info "Calculating expectation values..."
-    calc_nj_expectation(psi, res_dir)
-    calc_nupj_expectation(psi, res_dir)
-    calc_ndnj_expectation(psi, res_dir)
+    calc_orbital_occupation_expectations(psi, res_dir)
+    calc_orbital_occupation_expectations(psi0, res_dir, file="orb_occ.psi0.csv")
+    # calc_nj_expectation(psi, res_dir)
+    # calc_nupj_expectation(psi, res_dir)
+    # calc_ndnj_expectation(psi, res_dir)
     calc_entanglement_spectrum!(psi, res_dir)
     # calc_sj_expectation(psi, res_dir)
     
@@ -320,10 +352,12 @@ end
 let
     N = 120
     aspect = 3.0 * N / 120 
-    # aspect = 3.0
     aspect = 2.0
-    maxdim = 3200
+    maxdim = 1000
     eps = 1e-5
+    # conserved_nf = true
+    # conserved_sz = true
+    # conserved_g = true
     conserved_nf = true
     conserved_sz = true
     conserved_g = true

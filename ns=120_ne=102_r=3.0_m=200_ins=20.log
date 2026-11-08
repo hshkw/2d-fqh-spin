@@ -1,0 +1,142 @@
+nohup: 入力を無視します
+sweeps = Sweeps
+1 cutoff=1.0E-16, maxdim=20, mindim=1, noise=1.0E-06
+2 cutoff=1.0E-16, maxdim=40, mindim=1, noise=1.0E-06
+3 cutoff=1.0E-16, maxdim=80, mindim=1, noise=1.0E-06
+4 cutoff=1.0E-16, maxdim=160, mindim=1, noise=1.0E-06
+5 cutoff=1.0E-16, maxdim=200, mindim=1, noise=0.0E+00
+6 cutoff=1.0E-16, maxdim=200, mindim=1, noise=0.0E+00
+7 cutoff=1.0E-16, maxdim=200, mindim=1, noise=0.0E+00
+8 cutoff=1.0E-16, maxdim=200, mindim=1, noise=0.0E+00
+9 cutoff=1.0E-16, maxdim=200, mindim=1, noise=0.0E+00
+10 cutoff=1.0E-16, maxdim=200, mindim=1, noise=0.0E+00
+11 cutoff=1.0E-16, maxdim=200, mindim=1, noise=0.0E+00
+12 cutoff=1.0E-16, maxdim=200, mindim=1, noise=0.0E+00
+13 cutoff=1.0E-16, maxdim=200, mindim=1, noise=0.0E+00
+14 cutoff=1.0E-16, maxdim=200, mindim=1, noise=0.0E+00
+15 cutoff=1.0E-16, maxdim=200, mindim=1, noise=0.0E+00
+16 cutoff=1.0E-16, maxdim=200, mindim=1, noise=0.0E+00
+17 cutoff=1.0E-16, maxdim=200, mindim=1, noise=0.0E+00
+18 cutoff=1.0E-16, maxdim=200, mindim=1, noise=0.0E+00
+19 cutoff=1.0E-16, maxdim=200, mindim=1, noise=0.0E+00
+20 cutoff=1.0E-16, maxdim=200, mindim=1, noise=0.0E+00
+21 cutoff=1.0E-16, maxdim=200, mindim=1, noise=0.0E+00
+22 cutoff=1.0E-16, maxdim=200, mindim=1, noise=0.0E+00
+23 cutoff=1.0E-16, maxdim=200, mindim=1, noise=0.0E+00
+24 cutoff=1.0E-16, maxdim=200, mindim=1, noise=0.0E+00
+25 cutoff=1.0E-16, maxdim=200, mindim=1, noise=0.0E+00
+26 cutoff=1.0E-16, maxdim=200, mindim=1, noise=0.0E+00
+27 cutoff=1.0E-16, maxdim=200, mindim=1, noise=0.0E+00
+28 cutoff=1.0E-16, maxdim=200, mindim=1, noise=0.0E+00
+29 cutoff=1.0E-16, maxdim=200, mindim=1, noise=0.0E+00
+30 cutoff=1.0E-16, maxdim=200, mindim=1, noise=0.0E+00
+31 cutoff=1.0E-16, maxdim=200, mindim=1, noise=0.0E+00
+32 cutoff=1.0E-16, maxdim=200, mindim=1, noise=0.0E+00
+33 cutoff=1.0E-16, maxdim=200, mindim=1, noise=0.0E+00
+34 cutoff=1.0E-16, maxdim=200, mindim=1, noise=0.0E+00
+35 cutoff=1.0E-16, maxdim=200, mindim=1, noise=0.0E+00
+36 cutoff=1.0E-16, maxdim=200, mindim=1, noise=0.0E+00
+37 cutoff=1.0E-16, maxdim=200, mindim=1, noise=0.0E+00
+38 cutoff=1.0E-16, maxdim=200, mindim=1, noise=0.0E+00
+39 cutoff=1.0E-16, maxdim=200, mindim=1, noise=0.0E+00
+40 cutoff=1.0E-16, maxdim=200, mindim=1, noise=0.0E+00
+41 cutoff=1.0E-16, maxdim=200, mindim=1, noise=0.0E+00
+42 cutoff=1.0E-16, maxdim=200, mindim=1, noise=0.0E+00
+43 cutoff=1.0E-16, maxdim=200, mindim=1, noise=0.0E+00
+44 cutoff=1.0E-16, maxdim=200, mindim=1, noise=0.0E+00
+45 cutoff=1.0E-16, maxdim=200, mindim=1, noise=0.0E+00
+46 cutoff=1.0E-16, maxdim=200, mindim=1, noise=0.0E+00
+47 cutoff=1.0E-16, maxdim=200, mindim=1, noise=0.0E+00
+48 cutoff=1.0E-16, maxdim=200, mindim=1, noise=0.0E+00
+49 cutoff=1.0E-16, maxdim=200, mindim=1, noise=0.0E+00
+50 cutoff=1.0E-16, maxdim=200, mindim=1, noise=0.0E+00
+51 cutoff=1.0E-16, maxdim=200, mindim=1, noise=0.0E+00
+52 cutoff=1.0E-16, maxdim=200, mindim=1, noise=0.0E+00
+53 cutoff=1.0E-16, maxdim=200, mindim=1, noise=0.0E+00
+54 cutoff=1.0E-16, maxdim=200, mindim=1, noise=0.0E+00
+
+After sweep 1 energy=6919.775679821215  maxlinkdim=20 maxerr=1.35E-04 time=29.570
+After sweep 2 energy=6919.098985244901  maxlinkdim=40 maxerr=6.50E-05 time=15.431
+After sweep 3 energy=6918.821515182497  maxlinkdim=80 maxerr=2.03E-06 time=25.706
+After sweep 4 energy=6918.374553663811  maxlinkdim=160 maxerr=2.49E-06 time=58.079
+After sweep 5 energy=6917.879680283219  maxlinkdim=200 maxerr=5.50E-06 time=57.560
+After sweep 6 energy=6917.756694634117  maxlinkdim=200 maxerr=3.23E-06 time=60.275
+After sweep 7 energy=6917.7416379567685  maxlinkdim=200 maxerr=2.54E-06 time=57.924
+After sweep 8 energy=6917.727095978519  maxlinkdim=200 maxerr=4.44E-06 time=58.242
+After sweep 9 energy=6917.7204890516  maxlinkdim=200 maxerr=3.44E-06 time=57.310
+After sweep 10 energy=6917.716918496323  maxlinkdim=200 maxerr=2.69E-06 time=56.479
+After sweep 11 energy=6917.715564466061  maxlinkdim=200 maxerr=2.48E-06 time=57.348
+After sweep 12 energy=6917.715142630958  maxlinkdim=200 maxerr=2.22E-06 time=56.062
+After sweep 13 energy=6917.714988793291  maxlinkdim=200 maxerr=2.12E-06 time=56.539
+After sweep 14 energy=6917.714918994305  maxlinkdim=200 maxerr=2.06E-06 time=57.778
+After sweep 15 energy=6917.714862253894  maxlinkdim=200 maxerr=2.06E-06 time=50.048
+After sweep 16 energy=6917.714816702906  maxlinkdim=200 maxerr=2.12E-06 time=54.618
+After sweep 17 energy=6917.714780314727  maxlinkdim=200 maxerr=2.15E-06 time=53.892
+After sweep 18 energy=6917.714750799095  maxlinkdim=200 maxerr=2.17E-06 time=54.088
+After sweep 19 energy=6917.714727636456  maxlinkdim=200 maxerr=2.19E-06 time=54.282
+After sweep 20 energy=6917.714710162095  maxlinkdim=200 maxerr=2.21E-06 time=53.520
+After sweep 21 energy=6917.714696637464  maxlinkdim=200 maxerr=2.22E-06 time=53.945
+After sweep 22 energy=6917.71468647931  maxlinkdim=200 maxerr=2.23E-06 time=52.267
+After sweep 23 energy=6917.714678581754  maxlinkdim=200 maxerr=2.24E-06 time=53.480
+[ Info: Building sites...
+[ Info: Building initial MPS...
+[ Info: Initial MPS QN: QN(("G",12156),("N",204),("Sz",0))
+[ Info: Building Hamiltonian MPO...
+┌ Warning: `splitblocks` not specified. The default is `true`, which is a change from prior behavior.
+│   caller = MPO_new(os::OpIDSum{4, ComplexF64, Int64}, sites::Vector{Index}; kwargs::Base.Pairs{Symbol, Any, Nothing, @NamedTuple{basis_op_cache_vec::Vector{Vector{OpInfo}}, check_for_errors::Bool}}) at MPOConstruction.jl:224
+└ @ Core ~/.julia/packages/ITensorMPOConstruction/KLYNB/src/MPOConstruction.jl:224
+[ Info: Constructed Hamiltonian MPO, max link dim = 1160
+[ Info: truncated MPO INFO:
+[ Info:   length = 120
+[ Info:   link dims = [10, 27, 46, 67, 81, 81, 82, 82, 82, 82, 82, 82, 82, 82, 82, 82, 82, 82, 82, 82, 83, 83, 83, 83, 83, 83, 83, 83, 83, 83, 83, 83, 83, 83, 83, 83, 83, 83, 83, 83, 83, 83, 83, 83, 83, 83, 83, 83, 83, 83, 83, 83, 83, 83, 83, 83, 83, 83, 83, 83, 83, 83, 83, 83, 83, 83, 83, 83, 83, 83, 83, 83, 83, 83, 83, 83, 83, 83, 83, 83, 83, 83, 83, 83, 83, 83, 83, 83, 83, 83, 83, 83, 83, 83, 83, 82, 82, 82, 82, 82, 82, 82, 82, 82, 82, 82, 82, 82, 82, 82, 82, 82, 81, 81, 79, 67, 46, 27, 10]
+[ Info:   max link dim = 83
+[ Info: Starting DMRG...
+[ Info: Sweep(ha=1) 1, bond 60 (center), W=(83,83,83), |psi|=959.969 KiB, |PH|:in-mem=10.254 MiB, disk=0 bytes, disk+mem=10.254 MiB, disk_active=false, RSS=2.42 GB
+[ Info:    energy=6919.775679821215 diff=6919.775679821215  maxlinkdim=20 maxerr=1.35E-04
+[ Info: Sweep(ha=1) 2, bond 60 (center), W=(83,83,83), |psi|=1.549 MiB, |PH|:in-mem=12.622 MiB, disk=0 bytes, disk+mem=12.622 MiB, disk_active=false, RSS=2.42 GB
+[ Info:    energy=6919.098985244901 diff=0.676694576313821  maxlinkdim=40 maxerr=6.50E-05
+[ Info: Sweep(ha=1) 3, bond 60 (center), W=(83,83,83), |psi|=2.338 MiB, |PH|:in-mem=18.226 MiB, disk=0 bytes, disk+mem=18.226 MiB, disk_active=false, RSS=2.42 GB
+[ Info:    energy=6918.821515182497 diff=0.27747006240406336  maxlinkdim=80 maxerr=2.03E-06
+[ Info: Sweep(ha=1) 4, bond 60 (center), W=(83,83,83), |psi|=4.054 MiB, |PH|:in-mem=36.678 MiB, disk=0 bytes, disk+mem=36.678 MiB, disk_active=false, RSS=2.42 GB
+[ Info:    energy=6918.374553663811 diff=0.44696151868629386  maxlinkdim=160 maxerr=2.49E-06
+[ Info: Sweep(ha=1) 5, bond 60 (center), W=(83,83,83), |psi|=5.671 MiB, |PH|:in-mem=60.346 MiB, disk=0 bytes, disk+mem=60.346 MiB, disk_active=false, RSS=2.42 GB
+[ Info:    energy=6917.879680283219 diff=0.49487338059134345  maxlinkdim=200 maxerr=1.34E-06
+[ Info: Sweep(ha=1) 6, bond 60 (center), W=(83,83,83), |psi|=6.005 MiB, |PH|:in-mem=67.985 MiB, disk=0 bytes, disk+mem=67.985 MiB, disk_active=false, RSS=2.42 GB
+[ Info:    energy=6917.756694634117 diff=0.12298564910270215  maxlinkdim=200 maxerr=3.23E-06
+[ Info: Sweep(ha=1) 7, bond 60 (center), W=(83,83,83), |psi|=5.813 MiB, |PH|:in-mem=65.915 MiB, disk=0 bytes, disk+mem=65.915 MiB, disk_active=false, RSS=2.44 GB
+[ Info:    energy=6917.7416379567685 diff=0.015056677348184166  maxlinkdim=200 maxerr=2.54E-06
+[ Info: Sweep(ha=1) 8, bond 60 (center), W=(83,83,83), |psi|=5.716 MiB, |PH|:in-mem=64.714 MiB, disk=0 bytes, disk+mem=64.714 MiB, disk_active=false, RSS=2.44 GB
+[ Info:    energy=6917.727095978519 diff=0.014541978249326348  maxlinkdim=200 maxerr=4.44E-06
+[ Info: Sweep(ha=1) 9, bond 60 (center), W=(83,83,83), |psi|=5.659 MiB, |PH|:in-mem=63.757 MiB, disk=0 bytes, disk+mem=63.757 MiB, disk_active=false, RSS=2.44 GB
+[ Info:    energy=6917.7204890516 diff=0.006606926918721001  maxlinkdim=200 maxerr=3.16E-06
+[ Info: Sweep(ha=1) 10, bond 60 (center), W=(83,83,83), |psi|=5.630 MiB, |PH|:in-mem=63.353 MiB, disk=0 bytes, disk+mem=63.353 MiB, disk_active=false, RSS=2.44 GB
+[ Info:    energy=6917.716918496323 diff=0.003570555277292442  maxlinkdim=200 maxerr=2.65E-06
+[ Info: Sweep(ha=1) 11, bond 60 (center), W=(83,83,83), |psi|=5.598 MiB, |PH|:in-mem=62.878 MiB, disk=0 bytes, disk+mem=62.878 MiB, disk_active=false, RSS=2.44 GB
+[ Info:    energy=6917.715564466061 diff=0.0013540302625187906  maxlinkdim=200 maxerr=2.28E-06
+[ Info: Sweep(ha=1) 12, bond 60 (center), W=(83,83,83), |psi|=5.581 MiB, |PH|:in-mem=62.595 MiB, disk=0 bytes, disk+mem=62.595 MiB, disk_active=false, RSS=2.44 GB
+[ Info:    energy=6917.715142630958 diff=0.00042183510231552646  maxlinkdim=200 maxerr=2.21E-06
+[ Info: Sweep(ha=1) 13, bond 60 (center), W=(83,83,83), |psi|=5.565 MiB, |PH|:in-mem=62.285 MiB, disk=0 bytes, disk+mem=62.285 MiB, disk_active=false, RSS=2.44 GB
+[ Info:    energy=6917.714988793291 diff=0.00015383766731247306  maxlinkdim=200 maxerr=2.11E-06
+[ Info: Sweep(ha=1) 14, bond 60 (center), W=(83,83,83), |psi|=5.549 MiB, |PH|:in-mem=62.085 MiB, disk=0 bytes, disk+mem=62.085 MiB, disk_active=false, RSS=2.44 GB
+[ Info:    energy=6917.714918994305 diff=6.979898626013892e-5  maxlinkdim=200 maxerr=2.06E-06
+[ Info: Sweep(ha=1) 15, bond 60 (center), W=(83,83,83), |psi|=5.539 MiB, |PH|:in-mem=61.962 MiB, disk=0 bytes, disk+mem=61.962 MiB, disk_active=false, RSS=2.44 GB
+[ Info:    energy=6917.714862253894 diff=5.6740410400379915e-5  maxlinkdim=200 maxerr=2.06E-06
+[ Info: Sweep(ha=1) 16, bond 60 (center), W=(83,83,83), |psi|=5.532 MiB, |PH|:in-mem=61.858 MiB, disk=0 bytes, disk+mem=61.858 MiB, disk_active=false, RSS=2.44 GB
+[ Info:    energy=6917.714816702906 diff=4.5550988033937756e-5  maxlinkdim=200 maxerr=2.12E-06
+[ Info: Sweep(ha=1) 17, bond 60 (center), W=(83,83,83), |psi|=5.526 MiB, |PH|:in-mem=61.775 MiB, disk=0 bytes, disk+mem=61.775 MiB, disk_active=false, RSS=2.44 GB
+[ Info:    energy=6917.714780314727 diff=3.6388179069035687e-5  maxlinkdim=200 maxerr=2.15E-06
+[ Info: Sweep(ha=1) 18, bond 60 (center), W=(83,83,83), |psi|=5.519 MiB, |PH|:in-mem=61.692 MiB, disk=0 bytes, disk+mem=61.692 MiB, disk_active=false, RSS=2.44 GB
+[ Info:    energy=6917.714750799095 diff=2.9515632377297152e-5  maxlinkdim=200 maxerr=2.17E-06
+[ Info: Sweep(ha=1) 19, bond 60 (center), W=(83,83,83), |psi|=5.515 MiB, |PH|:in-mem=61.628 MiB, disk=0 bytes, disk+mem=61.628 MiB, disk_active=false, RSS=2.44 GB
+[ Info:    energy=6917.714727636456 diff=2.316263908141991e-5  maxlinkdim=200 maxerr=2.19E-06
+[ Info: Sweep(ha=1) 20, bond 60 (center), W=(83,83,83), |psi|=5.512 MiB, |PH|:in-mem=61.556 MiB, disk=0 bytes, disk+mem=61.556 MiB, disk_active=false, RSS=2.44 GB
+[ Info:    energy=6917.714710162095 diff=1.7474360902269837e-5  maxlinkdim=200 maxerr=2.21E-06
+[ Info: Sweep(ha=1) 21, bond 60 (center), W=(83,83,83), |psi|=5.511 MiB, |PH|:in-mem=61.530 MiB, disk=0 bytes, disk+mem=61.530 MiB, disk_active=false, RSS=2.44 GB
+[ Info:    energy=6917.714696637464 diff=1.352463095827261e-5  maxlinkdim=200 maxerr=2.22E-06
+[ Info: Sweep(ha=1) 22, bond 60 (center), W=(83,83,83), |psi|=5.509 MiB, |PH|:in-mem=61.506 MiB, disk=0 bytes, disk+mem=61.506 MiB, disk_active=false, RSS=2.44 GB
+[ Info:    energy=6917.71468647931 diff=1.015815360005945e-5  maxlinkdim=200 maxerr=2.23E-06
+[ Info: Sweep(ha=1) 23, bond 60 (center), W=(83,83,83), |psi|=5.508 MiB, |PH|:in-mem=61.503 MiB, disk=0 bytes, disk+mem=61.503 MiB, disk_active=false, RSS=2.44 GB
+[ Info:    energy=6917.714678581754 diff=7.897556315583643e-6  maxlinkdim=200 maxerr=2.23E-06
+[ Info: Energy difference less than 1.0E-05, stopping DMRG
+[ Info: Calculating expectation values...
+[ Info: Final energy: 6917.7146785818

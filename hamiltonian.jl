@@ -6,9 +6,10 @@ function calc_form_factor(qq_n::Float64)::Float64
 end
 
 function calc_akl_edge(k_diff::Int, l_diff::Int, N::Int, aspect::Float64, threshold::Float64=1e-15)::Float64
-    # insulator_layer = 2000
-    # N *= insulator_layer
-    # aspect *= insulator_layer
+    insulator_layer = 20
+    insulator_layer += 1
+    N *= insulator_layer
+    aspect *= insulator_layer
 
     akl = 0.0
 
@@ -88,6 +89,14 @@ end
 function build_hamiltonian(N::Int, aspect::Float64, sites, eps; system::String="torus")::MPO
     os = OpSum()
     tol = eps * 1e-4 / N
+
+    # B = 0.00
+
+    # # Zeeman term
+    # for j1 in 1:N
+    #     os .+= -B, Nup, j1
+    #     os .+= B, Ndn, j1
+    # end
 
     # 密度-密度項
     # === Up-Up ===
