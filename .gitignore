@@ -1,16 +1,37 @@
-# Calculation outputs
+# Generated DMRG data (keep large and frequently updated results locally)
 output/
 results/
 data/
 tmpout/
+log/
+logs/
 *.log
 
-# OS
-.DS_Store
+# Reproducible, selected analysis CSVs belong in research_data/
+# Example: research_data/qh_n211/es/spinful_m1000.csv
 
-# Excluded source file
-fqhsfermion_mps.jl
-
-# Python virtual environment
+# Python environments and caches
 .venv/
+venv/
 __pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Julia generated files
+.julia/
+*.jl.cov
+*.jl.*.cov
+
+# Notebook and editor transient files
+.ipynb_checkpoints/
+*.swp
+*.swo
+*~
+.vscode/.ropeproject/
+.DS_Store
+Thumbs.db
+
+# Excluded source file (existing project policy)
+fqhsfermion_mps.jl
