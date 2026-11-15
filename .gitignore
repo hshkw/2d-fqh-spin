@@ -10,3 +10,7 @@ tmpout/
 
 # Excluded source file
 fqhsfermion_mps.jl
+
+# Python virtual environment
+.venv/
+__pycache__/

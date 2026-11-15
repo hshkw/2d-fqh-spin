@@ -6,10 +6,10 @@ using Random
 
 include("sites_mps.jl")
 include("hamiltonian.jl")
+include("calc_fermion4_gr.jl")
 
 
-
-# ---DMRG オブザーバー-----------------------------------------------------------------------
+# ---DMRG オブザーバー-------------------------------------------------------
 mutable struct MemoryDMRGObserver
     inner::DMRGObserver
     sweeps_path::String
@@ -25,6 +25,7 @@ function MemoryDMRGObserver(eps::Float64; dir::String, minsweeps::Int=1, write_p
 
     return MemoryDMRGObserver(DMRGObserver(; energy_tol=eps, minsweeps=minsweeps), sweep_path_, write_path)
 end
+
 function _lr_disk_bytes(write_path::String)::Int
     isdir(write_path) || return 0
     total = 0
@@ -35,6 +36,7 @@ function _lr_disk_bytes(write_path::String)::Int
     end
     return total
 end
+
 function ITensorMPS.checkdone!(o::MemoryDMRGObserver; kwargs...)
     cur_eg = real(energies(o.inner))[end]
     prev_eg = length(energies(o.inner)) > 1 ? real(energies(o.inner))[end-1] : 0.0
@@ -64,6 +66,7 @@ function ITensorMPS.checkdone!(o::MemoryDMRGObserver; kwargs...)
 
     return false
 end
+
 function ITensorMPS.measure!(o::MemoryDMRGObserver; kwargs...)
     measure!(o.inner; kwargs...)
 
@@ -106,7 +109,8 @@ function ITensorMPS.measure!(o::MemoryDMRGObserver; kwargs...)
         )
     end
 end
-# ----スイープスケジュール------------------------------------------------
+
+# ----スイープスケジュール-----------------------------------------------
 function make_sweeps(maxdim::Int)::Sweeps
     sweep_num = 50
     dims = [20]
@@ -133,8 +137,8 @@ function make_sweeps(maxdim::Int)::Sweeps
     noise!(sweeps, noises...)
 
     # maxdim_schedule = [200, 200, 200, 200, 200, 200, 200]
-    # mindim_schedule = [200, 200, 200, 200, 200, 200, 200] # Forces dimension size
-    # cutoff_schedule = [1e-8, 1e-8, 1e-8, 1e-7, 1e-6, 1e-6, 1e-6] # Your desired loose cutoff
+    # mindim_schedule = [200, 200, 200, 200, 200, 200, 200]
+    # cutoff_schedule = [1e-8, 1e-8, 1e-8, 1e-7, 1e-6, 1e-6, 1e-6]
     # noise_schedule = [1e-6, 1e-7, 1e-8, 1e-8, 0, 0, 0]
     # nsweeps = length(maxdim_schedule)
     # sweeps = Sweeps(nsweeps)
@@ -145,7 +149,8 @@ function make_sweeps(maxdim::Int)::Sweeps
 
     return sweeps
 end
-# ---期待値計算-----------------------------------------------------------------------
+
+# ---期待値計算-----------------------------------------------------------
 function calc_orbital_occupation_expectations(psi::MPS, dir::String; file::String = "orb_occ_exp.csv")
     mkpath(dir)
 
@@ -175,6 +180,7 @@ function calc_orbital_occupation_expectations(psi::MPS, dir::String; file::Strin
 
     return nothing
 end
+
 function calc_nj_expectation(psi::MPS, dir::String)
     nj_exp_path = joinpath(dir, "nj_exp.csv")
     open(nj_exp_path, "w") do io
@@ -250,6 +256,7 @@ function calc_sz_expectation(psi::MPS, dir::String)
     end
 end
 
+
 function calc_entanglement_spectrum!(psi::MPS, dir::String)
     es_path = joinpath(dir, "es.csv")
 
@@ -259,29 +266,43 @@ function calc_entanglement_spectrum!(psi::MPS, dir::String)
 
     left_inds = (center_bond == 1) ? (siteind(psi, center_bond),) :
                 (linkind(psi, center_bond - 1), siteind(psi, center_bond))
+
     U, S, V = svd(psi[center_bond], left_inds)
 
     sv_ind = commonind(U, S)
     sv_ind_right = commonind(S, V)
 
     open(es_path, "w") do io
-        write(io, "N,G,val\n")
+        println(io, "N,Sz,G,val")
+
         offset = 0
+
         for qn_space in space(sv_ind)
             qn_val = qn_space.first
-            qn_n, qn_g = val(qn_val, "N"), val(qn_val, "G")
+
+            qn_n  = val(qn_val, "N")
+            qn_sz = val(qn_val, "Sz")
+            qn_g  = val(qn_val, "G")
+
             block_dim = qn_space.second
-            #println("QN = $qn_val, dim = $block_dim")
+
             for k in 1:block_dim
                 sv = S[sv_ind=>offset+k, sv_ind_right=>offset+k]
                 prob = sv^2
-                @printf(io, "%d,%d,%.10f\n", qn_n, qn_g, -log(prob))
+
+                @printf(
+                    io, "%d,%d,%d,%.10f\n",
+                    qn_n, qn_sz, qn_g, -log(prob)
+                )
             end
+
             offset += block_dim
         end
     end
 
+    return nothing
 end
+
 function calc_sisj_correlations(psi::MPS, dir::String)
     corr_path = joinpath(dir, "sisj_corr.csv")
 
@@ -306,13 +327,54 @@ function calc_sisj_correlations(psi::MPS, dir::String)
 
 end
 
-# ---DMRG 実行-----------------------------------------------------------------------
-function run_dmrg(N::Int; aspect::Float64, maxdim::Int, eps::Float64, system::String, conserved_nf::Bool=true, conserved_sz::Bool=true, conserved_g::Bool=true, res_dir::String, init_state::Int=1)
+
+function calc_ninj_correlations(psi::MPS, dir::String)
+    corr_path = joinpath(dir, "ninj_corr.csv")
+
+    # Density-density correlation matrices
+    nupnup = correlation_matrix(
+        psi, "Nup", "Nup"; ishermitian=true
+    )
+    ndnndn = correlation_matrix(
+        psi, "Ndn", "Ndn"; ishermitian=true
+    )
+    nupndn = correlation_matrix(
+        psi, "Nup", "Ndn"; ishermitian=false
+    )
+
+    N = length(psi)
+
+    open(corr_path, "w") do io
+        println(io, "i,j,upup,updn,dnup,dndn,ntot")
+
+        for i in 1:N
+            for j in i:N
+                uu = real(nupnup[i, j])
+                ud = real(nupndn[i, j])
+                du = real(nupndn[j, i])
+                dd = real(ndnndn[i, j])
+
+                ntot = uu + ud + du + dd
+
+                @printf(
+                    io,
+                    "%d,%d,%.12e,%.12e,%.12e,%.12e,%.12e\n",
+                    i, j, uu, ud, du, dd, ntot
+                )
+            end
+        end
+    end
+
+    return nothing
+end
+
+# ---DMRG 実行------------------------------------------------------------
+function run_dmrg(N::Int; aspect::Float64, maxdim::Int, eps::Float64, system::String, conserved_nf::Bool=true, conserved_sz::Bool=true, conserved_g::Bool=true, res_dir::String, init_state::Int=1, spin_flip::Symbol=:none)
     @info "Building sites..."
     sites = build_fqh_nsg_sites(N; conserved_nf=conserved_nf, conserved_sz=conserved_sz, conserved_g=conserved_g, system=system)
 
     @info "Building initial MPS..."
-    psi0 = build_initial_mps(N, sites, init_state)
+    psi0 = build_initial_mps(N, sites, init_state; spin_flip=spin_flip)
     @info "Initial MPS QN: $(totalqn(psi0))"
 
     @info "Building Hamiltonian MPO..."
@@ -343,33 +405,65 @@ function run_dmrg(N::Int; aspect::Float64, maxdim::Int, eps::Float64, system::St
     # calc_ndnj_expectation(psi, res_dir)
     calc_entanglement_spectrum!(psi, res_dir)
     # calc_sj_expectation(psi, res_dir)
-    
+
     calc_sisj_correlations(psi, res_dir)
+    calc_ninj_correlations(psi, res_dir)
+
+    calc_fermion4_gr(
+        psi,
+        res_dir;
+        system=system,
+        pair_sz=nothing,
+        anchor_site=cld(N, 2),
+        anchor_radius=12,
+        max_transfer=12,
+        batchsize=64,
+    )
 
     return energy, psi
 end
-# ---entry point-----------------------------------------------------------------------
+
+# ---entry point-----------------------------------------------------------
 let
-    N = 120
-    aspect = 3.0 * N / 120 
-    aspect = 2.0
+    # -----------------------------------------------------------------
+    # Calculation parameters (edit here)
+    # -----------------------------------------------------------------
+    N = 73
+    aspect = 2.0 * N / 120.0
     maxdim = 1000
     eps = 1e-5
-    # conserved_nf = true
-    # conserved_sz = true
-    # conserved_g = true
+
+    system = "edge"  # "edge" or "torus"
     conserved_nf = true
     conserved_sz = true
     conserved_g = true
-    system = "edge" # "torus" or "edge"
-    # init_state = 1 # 1: |010010...⟩, 2: |020020...⟩, 3: |03000003...⟩
-    init_state = 1
 
-    results_dir = abspath("results/fqh_ng_cylinder")
-    timestamp = Dates.format(Dates.now(), "yyyy-mm-dd_HHMMSS")
-    res_dir = results_dir * "/" * timestamp
+    # 1: Laughlin, 4: qh, 5: qp
+    init_state = 4
+    spin_flip = :none  # :none, :left, :right, :alternating
+
+    # -----------------------------------------------------------------
+    # Result directory (edit here)
+    # -----------------------------------------------------------------
+    results_root = "results/fqh_ng_cylinder"
+    # run_name = "no_dep_sk"  # e.g. "no_dep", "qh", "qp"
+    run_name = "no_dep_n120r2.0_sk"  # e.g. "no_dep", "qh", "qp"
+
+    time_stamp = Dates.format(Dates.now(), "yyyy-mm-dd_HHMMSS")
+    res_dir = abspath(joinpath(
+        results_root,
+        system,
+        run_name,
+        "n$(N)",
+        "asp$(aspect)",
+        "m$(maxdim)",
+    ))
     mkpath(res_dir)
+    @info "Results directory: $res_dir"
 
+    # -----------------------------------------------------------------
+    # Save calculation parameters
+    # -----------------------------------------------------------------
     config_path = joinpath(res_dir, "config.txt")
     open(config_path, "w") do io
         println(io, "N = $N")
@@ -377,11 +471,30 @@ let
         println(io, "maxdim = $maxdim")
         println(io, "eps = $eps")
         println(io, "conserved_nf = $conserved_nf")
+        println(io, "conserved_sz = $conserved_sz")
         println(io, "conserved_g = $conserved_g")
         println(io, "system = $system")
         println(io, "init_state = $init_state")
+        println(io, "spin_flip = $spin_flip")
+        println(io, "run_name = $run_name")
+        println(io, "time_stamp = $time_stamp")
     end
 
-    energy, psi = run_dmrg(N; aspect=aspect, maxdim=maxdim, eps=eps, system=system, conserved_nf=conserved_nf, conserved_sz=conserved_sz, conserved_g=conserved_g, res_dir=res_dir, init_state=init_state)
+    # -----------------------------------------------------------------
+    # Run DMRG
+    # -----------------------------------------------------------------
+    energy, psi = run_dmrg(
+        N;
+        aspect=aspect,
+        maxdim=maxdim,
+        eps=eps,
+        system=system,
+        conserved_nf=conserved_nf,
+        conserved_sz=conserved_sz,
+        conserved_g=conserved_g,
+        res_dir=res_dir,
+        init_state=init_state,
+        spin_flip=spin_flip,
+    )
     @info @sprintf("Final energy: %.10f", energy)
 end

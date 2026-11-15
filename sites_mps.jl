@@ -266,7 +266,7 @@ function build_initial_state(N::Int; nu::Int=3)::Vector{Int}
     for j in 2:nu:N
         state[j] = 2
     end
-    flip = 1
+    flip = 0
     for j in (N-3flip+2):3:N
         state[j] = 3
     end
@@ -468,13 +468,99 @@ function build_initial_state72(N::Int; nu::Int=3)::Vector{Int}
     # end
     return state
 end
-function build_initial_mps(N::Int, sites, init::Int=1)::MPS
+
+# --- Quasihole (qh) -------------------------------------------
+function build_initial_state_qh(N::Int; nu::Int=3)::Vector{Int}
+    N >= 2 || throw(ArgumentError("N must be at least 2."))
+    nu >= 2 || throw(ArgumentError("nu must be at least 2."))
+
+    # N-1 サイトの root configuration
+    state = build_initial_state(N - 1; nu=nu)
+
+    # 中央に空軌道を1つ挿入
+    insert!(state, cld(N, 2), 1)
+
+    return state
+end
+
+# --- Quasiparticle (qp) ---------------------------------------
+function build_initial_state_qp(N::Int; nu::Int=3)::Vector{Int}
+    N >= 2 || throw(ArgumentError("N must be at least 2."))
+    nu >= 2 || throw(ArgumentError("nu must be at least 2."))
+
+    # N+1 サイトの root configuration
+    state = build_initial_state(N + 1; nu=nu)
+
+    # 中央に最も近い空軌道を探す
+    empty_positions = findall(==(1), state)
+    center = (length(state) + 1) / 2
+    i = empty_positions[argmin(abs.(empty_positions .- center))]
+
+    # 空軌道を1つ除去
+    deleteat!(state, i)
+
+    return state
+end
+
+
+"""
+    flip_half_spins!(state::Vector{Int}; side::Symbol=:right)
+
+単一占有電子の半分のスピンを反転する。
+
+side = :right  右側半分
+side = :left   左側半分
+
+1: Emp, 2: Up, 3: Dn, 4: UpDn
+"""
+function flip_half_spins!(
+    state::Vector{Int};
+    side::Symbol=:right
+)::Vector{Int}
+
+    side in (:left, :right) ||
+        throw(ArgumentError("side must be :left or :right"))
+
+    occupied = findall(x -> x == 2 || x == 3, state)
+    nflip = length(occupied) ÷ 2
+
+    nflip == 0 && return state
+
+    positions = side == :left ?
+        occupied[1:nflip] :
+        occupied[end-nflip+1:end]
+
+    for j in positions
+        state[j] = state[j] == 2 ? 3 : 2
+    end
+
+    return state
+end
+
+function alternate_spins!(state::Vector{Int})
+    occupied = findall(s -> s == 2 || s == 3, state)
+
+    for (k, j) in enumerate(occupied)
+        state[j] = isodd(k) ? 2 : 3
+    end
+
+    return state
+end
+
+function build_initial_mps(
+    N::Int, sites, init::Int=1;
+    spin_flip::Symbol=:none
+)::MPS
     if init == 1
         state = build_initial_state(N)
     elseif init == 2
         state = build_initial_state2(N)
     elseif init == 3
         state = build_initial_state3(N)
+    elseif init == 4
+    state = build_initial_state_qh(N)
+    elseif init == 5
+        state = build_initial_state_qp(N)
     elseif init == 99
         state = build_initial_state99(N)
     elseif init == 96
@@ -488,7 +574,18 @@ function build_initial_mps(N::Int, sites, init::Int=1)::MPS
     else
         throw(ArgumentError("Invalid initial state index. Use 1, 2, or 3."))
     end
+    
     # return random_mps(sites, state; linkdims=100)
+    if spin_flip == :none
+    # スピン反転なし
+    elseif spin_flip in (:left, :right)
+        flip_half_spins!(state; side=spin_flip)
+    elseif spin_flip == :alternating
+        alternate_spins!(state)
+    else
+        throw(ArgumentError("Invalid spin_flip: $spin_flip"))
+    end
+
     return MPS(sites, state)
 end
 

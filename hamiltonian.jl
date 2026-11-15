@@ -6,7 +6,7 @@ function calc_form_factor(qq_n::Float64)::Float64
 end
 
 function calc_akl_edge(k_diff::Int, l_diff::Int, N::Int, aspect::Float64, threshold::Float64=1e-15)::Float64
-    insulator_layer = 20
+    insulator_layer = 0
     insulator_layer += 1
     N *= insulator_layer
     aspect *= insulator_layer
