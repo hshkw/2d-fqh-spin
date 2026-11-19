@@ -409,16 +409,16 @@ function run_dmrg(N::Int; aspect::Float64, maxdim::Int, eps::Float64, system::St
     calc_sisj_correlations(psi, res_dir)
     calc_ninj_correlations(psi, res_dir)
 
-    calc_fermion4_gr(
-        psi,
-        res_dir;
-        system=system,
-        pair_sz=nothing,
-        anchor_site=cld(N, 2),
-        anchor_radius=12,
-        max_transfer=12,
-        batchsize=64,
-    )
+    # calc_fermion4_gr(
+    # psi,
+    # res_dir;
+    # system=system,
+    # pair_sz=nothing,
+    # anchor_site=cld(N, 2),
+    # anchor_radius=12,
+    # max_transfer=12,
+    # batchsize=64,
+    # )
 
     return energy, psi
 end
