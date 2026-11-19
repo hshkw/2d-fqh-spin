@@ -319,7 +319,7 @@ function build_hamiltonian(N::Int, aspect::Float64, sites, eps; system::String="
     ]
     op_cache_vec = to_OpCacheVec(sites, [basis_ops for _ in 1:N])
 
-    H = MPO_new(os, sites; basis_op_cache_vec=op_cache_vec, check_for_errors=true)
+    H = MPO_new(os, sites; basis_op_cache_vec=op_cache_vec, check_for_errors=false)
     max_link_dim = maximum([dim(linkind(H, b)) for b in 1:length(H)-1])
     @info "Constructed Hamiltonian MPO, max link dim = $max_link_dim"
 
